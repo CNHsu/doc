@@ -1,16 +1,82 @@
 #study makefile
+[example path]
 \feu\emmc\nchrst\sim\makefile
+
  sed的替換功能
+ [example]
  SIM_DUMP_WAVE = `echo $(DUMP_WAVE) | sed -e 's/Y/+define+DUMP_WAVE/' | sed -e 's/N//'`
  --DUMP_WAVE = N
  -- '|' this is 'OR' operation
  -- sed -e  search 'Y' 替換 +define+DUMP_WAVE
  -- sed -e search 'N' 替換 ' '
+ -- '-e' 會處理後面字串中的特殊字元,在沒有使用-e參數下，\t被當作一般字元印出來
  
+ [example]
  VSIM = vsim -c -do vsim.do -coverage
  -- vsim is modelsim 
  
+ [example]
  echo $(TOP) | tr ' ' '\n' > run.f
  -- TOP = top.v
  -- tr 替換 空格 ' ' --> '\n' 換行 
- ![image] (https://github.com/CNHsu/doc/blob/main/1.jpg)
+
+[example]
+TEST_PATH = vec
+ALL_TEST0 = ${notdir ${wildcard ${TEST_PATH}/*}}
+notdir --去除路徑只留檔名
+wildcard --wildcard把 指定目錄 下的所有檔全部展開
+
+[example]
+.PHONY: ${ALL_TEST0:%=${TEST_PATH}/%}
+.PHONY --這是避免同名,告訴Makefile這個 rule是純的目標,沒有其他意圖
+--把 ALL_TEST0 內的子集 都改成 vec/子集
+
+
+@make check CHK_LIST=${@:${TEST_PATH}/%=%}
+--'@' 不列印這行的畫面
+--'check' 執行makefile內定義好的 check: 內容
+-- $@
+$@  表示目標文件
+$^  所有必要條件的檔名，並以空格隔開這些檔名 (這份清單已移除重複的檔名)
+$<  表示第一個依賴文件
+$?  表示比目標還要新的依賴文件列表
+
+FOO ?= bar
+若 FOO 未定義，則 FOO = bar；若 FOO 已定義，則 FOO 的值維持不變
+
+-e: 啟用反斜槓控制字符的轉換
+-E: 關閉反斜槓控制字符的轉換(預設如此)
+-n: 取消行末的換行符號(與-e選項下的\c字符同意) 不換行
+
+[example]
+	echo -n `date '+%x %X'
+-- print date format
+%x     locale’s date representation (e.g., 12/31/99)
+%X     locale’s time representation (e.g., 23:13:48)
+
+[example]
+egrep --color=always "ERRFAVC|ERRBAVC0|ERRBAVC1|tCDQSS|tDQSL|tDH" ./log/${@:${TEST_PATH}/%=%}.log | tee flash_err.log;
+ -- egrep == grep -E
+ -- tee 指令：將結果同時輸出到螢幕和檔案
+ -- color=always, it colors the matched string
+[example]
+ egrep -i "err" ./log/*.log | 
+ -- i: 不分大小寫
+ 
+ [example]
+ egrep -v "errors: 0, warnings: " | \
+ -- v, 移除批配字串以外所有行
+ -- q, 不顯示
+ 
+ [example]
+ if [ ! -s greperr.log ]; then \
+  --s  檔案存在?
+  
+  Linux export 命令用于设置或显示环境变量
+  
+#study rtl\smk\syn_w4.smk  
+switch case
+-- case ~~ esac
+if loop
+--- if ~~ fi
+ 
