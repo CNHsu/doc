@@ -1,0 +1,15 @@
+#study makefile
+\feu\emmc\nchrst\sim\makefile
+ sed的替換功能
+ SIM_DUMP_WAVE = `echo $(DUMP_WAVE) | sed -e 's/Y/+define+DUMP_WAVE/' | sed -e 's/N//'`
+ --DUMP_WAVE = N
+ -- '|' this is 'OR' operation
+ -- sed -e  search 'Y' 替換 +define+DUMP_WAVE
+ -- sed -e search 'N' 替換 ' '
+ 
+ VSIM = vsim -c -do vsim.do -coverage
+ -- vsim is modelsim 
+ 
+ echo $(TOP) | tr ' ' '\n' > run.f
+ -- TOP = top.v
+ -- tr 替換 空格 ' ' --> '\n' 換行 
