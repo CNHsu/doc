@@ -13,3 +13,4 @@
  echo $(TOP) | tr ' ' '\n' > run.f
  -- TOP = top.v
  -- tr 替換 空格 ' ' --> '\n' 換行 
+ ![image] (https://github.com/CNHsu/doc/blob/main/1.jpg)
